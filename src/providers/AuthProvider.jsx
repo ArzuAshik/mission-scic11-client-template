@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
@@ -12,6 +11,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.config";
+import useAxiosPublic from "../hooks/axiosPublic";
 
 export const AuthContext = createContext();
 
@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
   const auth = getAuth(app);
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -48,14 +49,20 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("🚀 ~ unsubscribe ~ currentUser:", currentUser)
-      setUser(currentUser);
-      
-      axios.get("http://localhost:5000", {
-        headers: {
-          Authorization: `Bearer ${currentUser.accessToken}`
-        }
-      })
+      console.log("🚀 ~ unsubscribe ~ currentUser:", currentUser);
+
+      if (currentUser) {
+        axiosPublic
+          .post("/add-user", {
+            email: currentUser.email,
+            role: "user",
+            loginCount: 1,
+          })
+          .then((res) => {
+            setUser(currentUser);
+            console.log(res.data);
+          });
+      }
 
       setLoading(false);
     });
