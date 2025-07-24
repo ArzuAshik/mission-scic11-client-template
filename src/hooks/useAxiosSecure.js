@@ -14,7 +14,6 @@ const useAxiosSecure = () => {
 
 
   useEffect(() => {
-    instance.interceptors.response()
   }, [])
   
 

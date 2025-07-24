@@ -1,7 +1,9 @@
 import axios from "axios";
 import { createBrowserRouter } from "react-router";
+import DashboardLayout from "../layouts/DashboardLayout";
 import RootLayout from "../layouts/RootLayout";
 import AddBooks from "../pages/AddBooks";
+import AllUsers from "../pages/AllUsers";
 import AvailableBooks from "../pages/AvailableBooks";
 import Dashboard from "../pages/Dashboard";
 import DetailsPage from "../pages/DetailsPage";
@@ -22,28 +24,45 @@ const mainRoutes = createBrowserRouter([
         element: <Home></Home>,
       },
       {
-        path: "/add-book",
-        element: <AddBooks />,
-      },
-      {
         path: "/available-books",
         element: <AvailableBooks />,
-      },
-      {
-        path: "/my-books",
-        element: <MyBooks />,
       },
       {
         path: "/details/:bookId",
         element: <DetailsPage />,
         loader: async ({ params }) => {
-          const {data} = await axios.get(`http://localhost:5000/details/${params.bookId}`);
+          const { data } = await axios.get(
+            `http://localhost:5000/details/${params.bookId}`
+          );
           return data;
         },
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: <DashboardLayout />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+          ,
+          {
+            path: "add-book",
+            element: <AddBooks />,
+          },
+          {
+            path: "all-users",
+            element: <AllUsers />,
+          },
+          {
+            path: "my-books",
+            element: <MyBooks />,
+          },
+          {
+            path: "my-requests",
+            element: <MyBooks />,
+          },
+        ],
       },
       {
         path: "login",

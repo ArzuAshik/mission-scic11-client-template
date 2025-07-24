@@ -18,18 +18,9 @@ const Header = () => {
       path: "/available-books",
     },
     {
-      name: "Add Book",
-      path: "/add-book",
-    },
-    {
-      name: "My Books",
-      path: "/my-books",
-    },
-    {
       name: "Dashboard",
       path: "/dashboard",
     },
-    
   ];
   return (
     <nav className="overflow-x-clip">

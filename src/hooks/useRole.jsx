@@ -8,6 +8,7 @@ export default function useRole() {
 
   useEffect(() => {
     axiosSecure("/get-user-role").then((res) => {
+      
       setRole(res.data.role);
       setLoading(false);
     });
